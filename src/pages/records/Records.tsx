@@ -4,11 +4,25 @@ import axios from "axios";
 import LoadingBar from "@/components/LoadingBar/LoadingBar";
 import { TransformedData, transformThisData } from "@/interface/functions";
 import DataTable from "@/components/dataTable/DataTable";
+import * as ACTIONS from "../../store/actions/action_types";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 const Records = () => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(true);
   const [tableLoader, setTableLoader] = useState(false);
   const [initialData, setInitialData] = useState<TransformedData[]>([]);
   // const [dynamicData, setDynamicData] = useState(initialData) // this guy will be used for search operations
+
+    const dispatch = useDispatch();
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+      dispatch({
+        type: ACTIONS.CLOSE_SIDEBAR,
+      }); // Scroll to the top of the page
+    }, [pathname, dispatch]);
+
 
   const column = [
     {
