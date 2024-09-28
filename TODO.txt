@@ -1,0 +1,13 @@
+HERE ARE A LIST OF THINGS TO IMPLEMENT
+
+1. REDIRECT MESSAGES
+2. Change logout button to a link tag (a) while maintaining all functions
+3. Drop down menu to restrict titles
+4. Drop down menu to restrict Chapters
+5. Customizing Navbar to accomodate username
+6. Changing the navbar profile to no user profile picture
+7. Optimizing slow network detection, put timers on server repsonse to prevent the user waiting for too long
+
+.finally(()=> {
+    edit the addData component to accomodate the new designs in the application
+})
