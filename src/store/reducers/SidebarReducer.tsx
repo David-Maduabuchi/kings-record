@@ -12,6 +12,11 @@ const SidebarReducer = (state = initialState, action: SIDEBAR) => {
         ...state,
         isSidebarOpen: true, // Always set to true
       };
+    case ACTION_TYPES.CLOSE_SIDEBAR:
+      return {
+        ...state,
+        isSidebarOpen: false, // Always set to true
+      };
     case ACTION_TYPES.TOGGLE_SIDEBAR: // New toggle case
       return {
         ...state,

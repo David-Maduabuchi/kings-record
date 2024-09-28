@@ -4,9 +4,13 @@ import LoadingBar from "@/components/LoadingBar/LoadingBar";
 import InputField from "@/components/inputField/InputField";
 import OptionsField from "@/components/optionsField/OptionField";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+import * as ACTIONS from "../../store/actions/action_types";
+
 import Toast from "@/components/toast/Toast";
 import { smoothScrollTo } from "@/interface/functions";
 import { format } from "date-fns";
+import { useDispatch } from "react-redux";
 const initialState = {
   title: "",
   firstName: "",
@@ -31,6 +35,16 @@ const AddData = () => {
   // UPDATE THE VALIDATE ERRORRS
   // ENABLE PUT REQUEST
   // STYING
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
+
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch({
+      type: ACTIONS.CLOSE_SIDEBAR,
+    }); // Scroll to the top of the page
+  }, [pathname, dispatch]);
 
   // Sample data based on your backend requirements
   const [formData, setFormData] = useState(initialState);

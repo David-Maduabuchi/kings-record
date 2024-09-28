@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BarChartBox from "@/components/barChart/BarChartBox";
 import LoadingBar from "@/components/LoadingBar/LoadingBar";
+import { useDispatch } from "react-redux";
+import * as ACTIONS from "../../store/actions/action_types";
 const Overview = () => {
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -13,11 +15,15 @@ const Overview = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   // const cardDropdownRef = useRef<HTMLDivElement>(null);
   const options = ["Partnership", "Givings"];
+  const dispatch = useDispatch();
   // const cardOptions = ["Yearly", "Monthly", "Weekly"];
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
-  }, [pathname]);
+    window.scrollTo(0, 0);
+    dispatch({
+      type: ACTIONS.CLOSE_SIDEBAR,
+    }); // Scroll to the top of the page
+  }, [pathname, dispatch]);
   //Replace Data with Info from the Database
   const memberShipData = {
     title: "Total Members",
