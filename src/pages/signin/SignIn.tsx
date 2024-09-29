@@ -15,17 +15,19 @@ import { smoothScrollTo } from "@/interface/functions";
 
 export default function SignIn() {
   const formRef = useRef<HTMLFormElement>(null);
-
+  const savedPassword = localStorage.getItem("ninjaArashi");
+  const savedEmail = localStorage.getItem("userEmail");
+  const [password, setPassword] = useState(savedPassword ? savedPassword : "");
+  const [Email, setEmail] = useState(savedEmail ? savedEmail : "");
   const redirect = useNavigate();
   const [loading, setLoading] = useState(false);
   const [toastType, setToastType] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [Email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const dispatch = useDispatch();
+  const [rememberState, setRememberState] = useState(false);
 
   const redirectionMessage = useSelector((state: RootState) => {
     return state.auth_reducer.redirectionMessage;
@@ -36,7 +38,7 @@ export default function SignIn() {
       setLoginError(redirectionMessage);
       setTimeout(() => {
         setLoginError("");
-        localStorage.clear();
+        localStorage.removeItem("userToken");
       }, 10000);
     }
   }, [redirectionMessage, dispatch]);
@@ -48,20 +50,19 @@ export default function SignIn() {
     setEmailError("");
     setPasswordError("");
     setLoginError("");
-        const form = formRef.current;
+    const form = formRef.current;
 
-        if (form === null) return; // Guard to ensure formRef.current is not null
+    if (form === null) return; // Guard to ensure formRef.current is not null
 
-        // TypeScript now knows `form` is not null, so `querySelector` is safe
-        const firstInvalidField = form.querySelector(
-          ":invalid"
-        ) as HTMLElement | null;
+    // TypeScript now knows `form` is not null, so `querySelector` is safe
+    const firstInvalidField = form.querySelector(
+      ":invalid"
+    ) as HTMLElement | null;
 
-        if (firstInvalidField) {
-          smoothScrollTo(firstInvalidField, 500); // Slow scroll (1000ms)
-          firstInvalidField.focus();
-        }
-
+    if (firstInvalidField) {
+      smoothScrollTo(firstInvalidField, 500); // Slow scroll (1000ms)
+      firstInvalidField.focus();
+    }
 
     // Check if email is empty or invalid
     if (!Email || !/\S+@\S+\.\S+/.test(Email)) {
@@ -92,6 +93,10 @@ export default function SignIn() {
           setLoading(false);
           setSuccessMessage("Welcome back to Believers Love World");
           setToastType("success");
+
+          localStorage.setItem("ninjaArashi", password);
+          localStorage.setItem("userEmail", Email);
+
           dispatch({
             type: ACTIONS.LOGIN_SUCCESS,
           });
@@ -165,6 +170,7 @@ export default function SignIn() {
                   <InputField
                     type="email"
                     label="Email"
+                    value={Email}
                     placeholder="Enter your email"
                     required
                     autoComplete="email"
@@ -182,6 +188,8 @@ export default function SignIn() {
                     label="Password"
                     placeholder="Enter your password"
                     required
+                    
+                    value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
                       setPasswordError("");
@@ -196,7 +204,12 @@ export default function SignIn() {
                 </div>
 
                 <span className="flex text-xs space-x-2 leading-[18px]">
-                  <Switch className="h-6" />
+                  <Switch
+                    onClick={() => {
+                      setRememberState(!rememberState);
+                    }}
+                    className="h-6"
+                  />
                   <p className="capitalize text-[#2D3748]">remember me</p>
                 </span>
 

@@ -121,42 +121,40 @@ const AddNew = () => {
       });
     }
   };
- const validateField = () => {
-   const newErrors: { [key: string]: string } = {};
+  const newErrors: { [key: string]: string } = {};
+  const validateField = () => {
+    if (!formData.firstName)
+      newErrors.firstName = "Adam named all things, yet this field has none";
+    if (!formData.title) newErrors.title = "No title provided";
+    if (!formData.lastName)
+      newErrors.lastName = "The lineage matters - provide a surname";
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "We need a valid email to fellowship.";
+    if (!formData.phoneNumber)
+      newErrors.phoneNumber = "Please provide a number.";
+    if (!formData.birthDate)
+      newErrors.birthDate = "When was this new soul born?";
+    if (formData.phoneNumber.length < 11) {
+      newErrors.phoneNumber = "Please provide a valid phone number";
+    }
+    if (parseInt(formData.partnershipAmount) < 0) {
+      newErrors.partnershipAmount = "Amount cannot be less than Zero";
+    }
+    if (parseInt(formData.givingsAmount) < 0)
+      newErrors.givingsAmount = "Amount cannot be less than Zero";
 
-   if (!formData.firstName)
-     newErrors.firstName = "Adam named all things, yet this field has none";
-   if (!formData.title) newErrors.title = "No title provided";
-   if (!formData.lastName)
-     newErrors.lastName = "The lineage matters - provide a surname";
-   if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-     newErrors.email = "We need a valid email to fellowship.";
-   if (!formData.phoneNumber)
-     newErrors.phoneNumber = "Please provide a number.";
-   if (!formData.birthDate)
-     newErrors.birthDate = "When was this new soul born?";
-   if (formData.phoneNumber.length < 11) {
-     newErrors.phoneNumber = "Please provide a valid phone number";
-   }
-   if (parseInt(formData.partnershipAmount) < 0) {
-     newErrors.partnershipAmount = "Amount cannot be less than Zero";
-   }
-   if (parseInt(formData.givingsAmount) < 0)
-     newErrors.givingsAmount = "Amount cannot be less than Zero";
+    // Check if Date is required based on partnerships or givings
+    const isPartnershipValid =
+      formData.partnershipsType && formData.partnershipAmount;
+    const isGivingsValid = formData.givingsType && formData.givingsAmount;
 
-   // Check if Date is required based on partnerships or givings
-   const isPartnershipValid =
-     formData.partnershipsType && formData.partnershipAmount;
-   const isGivingsValid = formData.givingsType && formData.givingsAmount;
+    // If either partnership or givings is valid, enforce the Date field
+    if ((isPartnershipValid || isGivingsValid) && !formData.Date) {
+      newErrors.Date = "Date is required for partnership or givings.";
+    }
 
-   // If either partnership or givings is valid, enforce the Date field
-   if ((isPartnershipValid || isGivingsValid) && !formData.Date) {
-     newErrors.Date = "Date is required for partnership or givings.";
-   }
-
-   return newErrors;
- };
-
+    return newErrors;
+  };
 
   const handleSubmit = async (
     event: KeyboardEvent<HTMLInputElement> | FormEvent<HTMLButtonElement>
@@ -186,7 +184,7 @@ const AddNew = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         Date: formData.Date ? format(formData.Date, "yyyy-MM-dd") : "",
-        email: formData.email,
+        email: formData.email.toLowerCase(),
         phoneNumber: formatPhoneNumber(formData.phoneNumber),
         birthDate: formData.birthDate
           ? format(formData.birthDate, "yyyy-MM-dd")
@@ -212,8 +210,6 @@ const AddNew = () => {
         ];
       }
 
-      console.log("formDataToSend", formDataToSend);
-
       // Proceed with API call
       axios
         .post(
@@ -237,9 +233,18 @@ const AddNew = () => {
             setToastType("");
           }, 3000);
         })
-        .catch(() => {
+        .catch((err) => {
           setLoading(false);
+          if (
+            err.response.data.error ===
+            "Member is already stored in the database"
+          ) {
+            newErrors.email = err.response.data.error;
+            validateField();
+            console.log(errors);
+          }
           setToastType("error");
+          console.log(err);
           setTimeout(() => {
             setToastType("");
           }, 5000);
