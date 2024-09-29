@@ -1,5 +1,9 @@
 .InputComponent {
   div {
+    label {
+      border: 1px solid;
+      display: none;
+    }
     input {
       border-radius: 15px;
       padding: 15px 20px;

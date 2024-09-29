@@ -55,7 +55,7 @@ const Navbar = () => {
           <img src="/svg/help.svg" alt="" />
           <img src="/svg/notification.svg" alt="" />
           <img src="/svg/settings.svg" alt="" />
-          <img src="/images/profile.png" alt="" className="profile-img" />
+          <img src="/svg/noProfile.svg" alt="" className="profile-img" />
         </div>
       </div>
     </div>

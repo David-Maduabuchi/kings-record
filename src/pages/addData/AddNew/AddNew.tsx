@@ -17,6 +17,29 @@ import Toast from "@/components/toast/Toast";
 import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
 import { useDispatch } from "react-redux";
 import { format } from "date-fns";
+
+interface Partnership {
+  type: string;
+  amount: string;
+}
+
+interface Givings {
+  type: string;
+  amount: string;
+}
+
+interface FormDataToSend {
+  title: string;
+  firstName: string;
+  lastName: string;
+  Date: string;
+  birthDate: string;
+  email: string;
+  phoneNumber: string;
+  partnerships?: Partnership[]; // Optional, as it may be omitted
+  givings?: Givings[]; // Optional, as it may be omitted
+}
+
 const initialState = {
   title: "",
   firstName: "",
@@ -26,9 +49,9 @@ const initialState = {
   email: "",
   phoneNumber: "",
   partnershipsType: "",
-  partnershipAmount: 0,
+  partnershipAmount: "",
   givingsType: "",
-  givingsAmount: 0,
+  givingsAmount: "",
 };
 const AddNew = () => {
   const [toastType, setToastType] = useState("");
@@ -98,30 +121,42 @@ const AddNew = () => {
       });
     }
   };
-  const validateField = () => {
-    const newErrors: { [key: string]: string } = {};
+ const validateField = () => {
+   const newErrors: { [key: string]: string } = {};
 
-    if (!formData.firstName)
-      newErrors.firstName = "Adam named all things, yet this field has none";
-    if (!formData.title) newErrors.title = "No title provided  ";
-    if (!formData.lastName)
-      newErrors.lastName = "The lineage matters - provide a surname";
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "We need a valid email to fellowship  .";
-    if (!formData.phoneNumber)
-      newErrors.phoneNumber = "Please provide a number.";
-    if (!formData.birthDate)
-      newErrors.birthDate = "When was this new soul born?";
-    if (formData.phoneNumber.length < 11) {
-      newErrors.phoneNumber = "Please provide a valid phone number";
-    }
-    if (formData.partnershipAmount < 0) {
-      newErrors.partnershipAmount = "Amount cannot be less than Zero";
-    }
-    if (formData.givingsAmount < 0)
-      newErrors.givingsAmount = "Amount cannot be less than Zero";
-    return newErrors;
-  };
+   if (!formData.firstName)
+     newErrors.firstName = "Adam named all things, yet this field has none";
+   if (!formData.title) newErrors.title = "No title provided";
+   if (!formData.lastName)
+     newErrors.lastName = "The lineage matters - provide a surname";
+   if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
+     newErrors.email = "We need a valid email to fellowship.";
+   if (!formData.phoneNumber)
+     newErrors.phoneNumber = "Please provide a number.";
+   if (!formData.birthDate)
+     newErrors.birthDate = "When was this new soul born?";
+   if (formData.phoneNumber.length < 11) {
+     newErrors.phoneNumber = "Please provide a valid phone number";
+   }
+   if (parseInt(formData.partnershipAmount) < 0) {
+     newErrors.partnershipAmount = "Amount cannot be less than Zero";
+   }
+   if (parseInt(formData.givingsAmount) < 0)
+     newErrors.givingsAmount = "Amount cannot be less than Zero";
+
+   // Check if Date is required based on partnerships or givings
+   const isPartnershipValid =
+     formData.partnershipsType && formData.partnershipAmount;
+   const isGivingsValid = formData.givingsType && formData.givingsAmount;
+
+   // If either partnership or givings is valid, enforce the Date field
+   if ((isPartnershipValid || isGivingsValid) && !formData.Date) {
+     newErrors.Date = "Date is required for partnership or givings.";
+   }
+
+   return newErrors;
+ };
+
 
   const handleSubmit = async (
     event: KeyboardEvent<HTMLInputElement> | FormEvent<HTMLButtonElement>
@@ -131,22 +166,22 @@ const AddNew = () => {
 
     if (form === null) return; // Guard to ensure formRef.current is not null
 
-    // TypeScript now knows `form` is not null, so `querySelector` is safe
     const firstInvalidField = form.querySelector(
       ":invalid"
     ) as HTMLElement | null;
 
     if (firstInvalidField) {
-      smoothScrollTo(firstInvalidField, 500); // Slow scroll (1000ms)
+      smoothScrollTo(firstInvalidField, 500); // Slow scroll
       firstInvalidField.focus();
     }
 
     const validationErrors = validateField();
     setErrors(validationErrors);
+
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
 
-      const formDataToSend = {
+      const formDataToSend: FormDataToSend = {
         title: formData.title,
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -156,31 +191,40 @@ const AddNew = () => {
         birthDate: formData.birthDate
           ? format(formData.birthDate, "yyyy-MM-dd")
           : "",
-        partnerships: [
+      };
+
+      // Conditionally add partnerships and givings
+      if (formData.partnershipsType && formData.partnershipAmount) {
+        formDataToSend.partnerships = [
           {
             type: formData.partnershipsType,
             amount: formData.partnershipAmount,
           },
-        ],
-        givings: [
+        ];
+      }
+
+      if (formData.givingsType && formData.givingsAmount) {
+        formDataToSend.givings = [
           {
             type: formData.givingsType,
             amount: formData.givingsAmount,
           },
-        ],
-      };
-      console.log(formDataToSend);
-      console.log("formData", formData);
+        ];
+      }
+
+      console.log("formDataToSend", formDataToSend);
+
+      // Proceed with API call
       axios
         .post(
-          "https://kingsrecord-backend.onrender.com/api/v1/form-data",
+          "https://kingsrecord-backend.onrender.com/api/v1/add-member",
           formDataToSend,
           {
             headers: {
               Authorization: `Bearer ${localStorage
                 .getItem("userToken")
-                ?.toString()}`, // Add your token
-              "Content-Type": "application/json", // Set content type for FormData
+                ?.toString()}`,
+              "Content-Type": "application/json",
             },
           }
         )
@@ -205,6 +249,7 @@ const AddNew = () => {
         });
     }
   };
+
   // Loading logic
   const [loader, setLoader] = useState(true);
   useEffect(() => {
@@ -389,7 +434,7 @@ const AddNew = () => {
           onChange={handleChange}
           value={formData.Date}
         />
-        <span className="error-message">{errors.Date}</span>
+        <span className="error-message red-color">{errors.Date}</span>
       </div>
       {loading ? (
         <div className="buttonContainer">
