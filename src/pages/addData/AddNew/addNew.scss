@@ -93,12 +93,13 @@
   }
   div.date {
     width: 420px;
+    height: auto;
     margin-left: 55px;
     @include sm {
       width: 80%;
       margin-left: 10px;
     }
-    .error-message {
+    span.error-message {
       font-size: 12px;
       height: 12px;
     }
