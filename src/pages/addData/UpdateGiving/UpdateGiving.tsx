@@ -1,4 +1,11 @@
-import { ChangeEvent, useEffect, useState, FormEvent, useRef } from "react";
+import {
+  ChangeEvent,
+  useEffect,
+  useState,
+  FormEvent,
+  useRef,
+  KeyboardEvent,
+} from "react";
 import "./UpdateGivings.scss";
 import LoadingBar from "@/components/LoadingBar/LoadingBar";
 import InputField from "@/components/inputField/InputField";
@@ -7,15 +14,15 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import * as ACTIONS from "../../../store/actions/action_types";
 import Toast from "@/components/toast/Toast";
-import { smoothScrollTo } from "@/interface/functions";
+import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
 import { format } from "date-fns";
 import { useDispatch } from "react-redux";
-
 const initialState = {
   title: "",
   firstName: "",
   lastName: "",
   Date: "",
+  BirthDate: "",
   email: "",
   phoneNumber: "",
   partnershipsType: "",
@@ -95,22 +102,30 @@ const UpdateGiving = () => {
     const newErrors: { [key: string]: string } = {};
 
     if (!formData.firstName)
-      newErrors.firstName = "Just as God called people by name, what is yours?";
+      newErrors.firstName = "Adam named all things, yet this field has none";
+    if (!formData.title) newErrors.title = "No title provided  ";
     if (!formData.lastName)
-      newErrors.lastName = "The lineage matters - what is your surname?";
+      newErrors.lastName = "The lineage matters - provide a surname";
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email =
-        "As God sent messages to prophets, we need your email to reach you.";
+      newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
-      newErrors.phoneNumber =
-        "How will we call if the trumpet sounds? Please provide your number.";
-    if (!formData.Date)
-      newErrors.Date =
-        "In the beginning, God set a date – please provide yours.";
+      newErrors.phoneNumber = "Please provide a number.";
+    if (!formData.BirthDate)
+      newErrors.BirthDate = "When was this new soul born?";
+    if (formData.phoneNumber.length < 11) {
+      newErrors.phoneNumber = "Please provide a valid phone number";
+    }
+    if (formData.partnershipAmount < 0) {
+      newErrors.partnershipAmount = "Amount cannot be less than Zero";
+    }
+    if (formData.givingsAmount < 0)
+      newErrors.givingsAmount = "Amount cannot be less than Zero";
     return newErrors;
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (
+    event: KeyboardEvent<HTMLInputElement> | FormEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
     const form = formRef.current;
 
@@ -128,7 +143,6 @@ const UpdateGiving = () => {
 
     const validationErrors = validateField();
     setErrors(validationErrors);
-    console.log(errors);
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
 
@@ -138,7 +152,8 @@ const UpdateGiving = () => {
         lastName: formData.lastName,
         Date: format(formData.Date, "yyyy-MM-dd"),
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
+        phoneNumber: formatPhoneNumber(formData.phoneNumber),
+        BirthDate: formData.BirthDate,
         partnerships: [
           {
             type: formData.partnershipsType,
@@ -152,6 +167,7 @@ const UpdateGiving = () => {
           },
         ],
       };
+      console.log(formDataToSend);
       axios
         .put(
           "https://kingsrecord-backend.onrender.com/api/v1/form-data",
@@ -186,7 +202,6 @@ const UpdateGiving = () => {
         });
     }
   };
-
   // Loading logic
   const [loader, setLoader] = useState(true);
   useEffect(() => {
@@ -199,137 +214,179 @@ const UpdateGiving = () => {
 
   return (
     <div className="AddNewContainer">
+      <header>Update Givings Data</header>
       <form ref={formRef} className="inputFieldContainer">
-        <div>
-          <InputField
-            type="text"
-            name="title"
-            label="Title"
-            required  
-            placeholder="e.g Brother, Sister"
-            onChange={handleChange}
-            value={formData.title}
-          />
-          <span className="error-message ">{errors.title}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="text"
+              name="title"
+              required
+              label="Title"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              placeholder="e.g Brother, Sister"
+              onChange={handleChange}
+              value={formData.title}
+            />
+            <span className="error-message ">{errors.title}</span>
+          </div>
 
-        <div>
-          <InputField
-            type="text"
-            name="firstName"
-            label="First Name"
-            placeholder="e.g David"
-            required
-            onChange={handleChange}
-            value={formData.firstName}
-          />
-          <span className="error-message ">{errors.firstName}</span>
-        </div>
+          <div>
+            <InputField
+              type="text"
+              name="firstName"
+              label="First Name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              placeholder="e.g David"
+              required
+              onChange={handleChange}
+              value={formData.firstName}
+            />
+            <span className="error-message ">{errors.firstName}</span>
+          </div>
+        </section>
 
-        <div>
-          <InputField
-            type="text"
-            name="lastName"
-            label="Last Name"
-            placeholder="e.g Maduabuchi"
-            required
-            onChange={handleChange}
-            value={formData.lastName}
-          />
-          <span className="error-message ">{errors.lastName}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="text"
+              name="lastName"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              label="Last Name"
+              placeholder="e.g Maduabuchi"
+              required
+              onChange={handleChange}
+              value={formData.lastName}
+            />
+            <span className="error-message ">{errors.lastName}</span>
+          </div>
 
-        <div>
-          <InputField
-            type="email"
-            name="email"
-            label="Email"
-            placeholder="e.g example@gmail.com"
-            required
-            onChange={handleChange}
-            value={formData.email}
-          />
-          <span className="error-message">{errors.email}</span>
-        </div>
+          <div>
+            <InputField
+              type="email"
+              name="email"
+              label="Email"
+              placeholder="e.g example@gmail.com"
+              required
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              onChange={handleChange}
+              value={formData.email}
+            />
+            <span className="error-message">{errors.email}</span>
+          </div>
+        </section>
 
-        <div>
-          <InputField
-            type="tel"
-            name="phoneNumber"
-            label="Phone Number"
-            placeholder="08164413182"
-            required
-            onChange={handleChange}
-            value={formData.phoneNumber}
-          />
-          <span className="error-message">{errors.phoneNumber}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="tel"
+              name="phoneNumber"
+              label="Phone Number"
+              placeholder="08164413182"
+              required
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              minLength={11}
+              onChange={handleChange}
+              value={formatPhoneNumber(formData.phoneNumber)}
+            />
+            <span className="error-message">{errors.phoneNumber}</span>
+          </div>
 
-        <div className="date">
-          <InputField
-            type="date"
-            name="Date"
-            max={today}
-            label="Date"
-            required
-            onChange={handleChange}
-            value={formData.Date}
-          />
-          <span className="error-message">{errors.Date}</span>
-        </div>
+          <div>
+            <InputField
+              type="date"
+              name="BirthDate"
+              max={today}
+              label="Birth Date"
+              required
+              onChange={handleChange}
+              value={formData.BirthDate}
+            />
+            <span className="error-message">{errors.BirthDate}</span>
+          </div>
+        </section>
       </form>
 
-      {/* Partnership Arms Section */}
-      <div className="optionsFieldContainer">
-        <h5 className="font-bold">Partnership Arms</h5>
+      <section className="optionsFieldSection">
+        <div className="optionsFieldContainer">
+          <h5 className="font-bold">Partnership Arms</h5>
 
-        <div>
-          <OptionsField
-            dataLabel="partnershipsType"
-            options={raphsodyOfRealitiesOptions}
-            onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
-            label="Select Partnership Arm"
-          />
-          <span className="error-message">{errors.partnershipsType}</span>
+          <div>
+            <OptionsField
+              dataLabel="partnershipsType"
+              options={raphsodyOfRealitiesOptions}
+              onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
+              label="Select Partnership Arm"
+            />
+            <span className="error-message">{errors.partnershipsType}</span>
+          </div>
+
+          <div>
+            <InputField
+              type="number"
+              name="partnershipAmount"
+              label=""
+              placeholder="Amount(N)"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              onChange={handleChange}
+              value={formData.partnershipAmount}
+            />
+            <span className="error-message">{errors.partnershipAmount}</span>
+          </div>
         </div>
 
-        <div>
-          <InputField
-            type="number"
-            name="partnershipAmount"
-            label=""
-            placeholder="Amount(N)"
-            onChange={handleChange}
-            value={formData.partnershipAmount}
-          />
-          <span className="error-message">{errors.partnershipAmount}</span>
-        </div>
-      </div>
+        {/* Givings Type Section */}
+        <div className="optionsFieldContainer">
+          <h5 className="font-bold">Givings Type</h5>
+          <div>
+            <OptionsField
+              dataLabel="givingsType"
+              onInputChange={handleOptionsChange}
+              options={givingsTypeOptions}
+              label={"Select Givings Type"}
+            />
+            <span className="error-message">{errors.givingsType}</span>
+          </div>
 
-      {/* Givings Type Section */}
-      <div className="optionsFieldContainer">
-        <h5 className="font-bold">Givings Type</h5>
-        <div>
-          <OptionsField
-            dataLabel="givingsType"
-            onInputChange={handleOptionsChange}
-            options={givingsTypeOptions}
-            label={"Select Givings Type"}
-          />
-          <span className="error-message">{errors.givingsType}</span>
+          <div>
+            <InputField
+              type="number"
+              name="givingsAmount"
+              label=""
+              placeholder="Amount(N)"
+              onChange={handleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
+              value={formData.givingsAmount}
+            />
+            <span className="error-message">{errors.givingsAmount}</span>
+          </div>
         </div>
+      </section>
 
-        <div>
-          <InputField
-            type="number"
-            name="givingsAmount"
-            label=""
-            placeholder="Amount(N)"
-            onChange={handleChange}
-            value={formData.givingsAmount}
-          />
-          <span className="error-message">{errors.givingsAmount}</span>
-        </div>
+      <div className="date">
+        <InputField
+          type="date"
+          name="Date"
+          max={today}
+          label="Date of Giving"
+          onChange={handleChange}
+          value={formData.Date}
+        />
+        <span className="error-message">{errors.Date}</span>
       </div>
       {loading ? (
         <div className="buttonContainer">

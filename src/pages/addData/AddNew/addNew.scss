@@ -12,6 +12,8 @@
     font-weight: 500;
     font-family: Inter, Poppins;
     margin-left: 55px;
+    color: #7b7d7e;
+    text-transform: uppercase;
   }
 
   form {
@@ -48,9 +50,6 @@
           }
         }
       }
-    }
-    div.date {
-      width: 420px;
     }
   }
 
@@ -92,6 +91,14 @@
       }
     }
   }
+  div.date {
+    width: 420px;
+    margin-left: 55px;
+    @include sm {
+      width: 80%;
+      margin-left: 10px;
+    }
+  } 
   .buttonContainer {
     margin-top: 40px;
     margin-left: 55px;

@@ -124,3 +124,15 @@ export const transformThisData = (
     };
   });
 };
+
+
+
+export const formatPhoneNumber = (phoneNumber: string) => {
+  // Remove any non-digit characters (if the input might have them)
+  const cleaned = phoneNumber.replace(/\D/g, '');
+
+  // Format the number as 0813-443-1286
+  const formatted = cleaned.replace(/(\d{4})(\d{3})(\d{4})/, '$1-$2-$3');
+
+  return formatted;
+};

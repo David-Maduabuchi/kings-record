@@ -1,4 +1,11 @@
-import { ChangeEvent, useEffect, useState, FormEvent, useRef } from "react";
+import {
+  ChangeEvent,
+  useEffect,
+  useState,
+  FormEvent,
+  useRef,
+  KeyboardEvent,
+} from "react";
 import "./AddNew.scss";
 import LoadingBar from "@/components/LoadingBar/LoadingBar";
 import InputField from "@/components/inputField/InputField";
@@ -7,7 +14,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import * as ACTIONS from "../../../store/actions/action_types";
 import Toast from "@/components/toast/Toast";
-import { smoothScrollTo } from "@/interface/functions";
+import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
 import { format } from "date-fns";
 import { useDispatch } from "react-redux";
 const initialState = {
@@ -103,13 +110,22 @@ const AddNew = () => {
       newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
       newErrors.phoneNumber = "Please provide a number.";
-    if (!formData.Date) newErrors.Date = "Date member was added";
     if (!formData.BirthDate)
-      newErrors.BirthdDate = "When was this new soul born?";
+      newErrors.BirthDate = "When was this new soul born?";
+    if (formData.phoneNumber.length < 11) {
+      newErrors.phoneNumber = "Please provide a valid phone number";
+    }
+    if (formData.partnershipAmount < 0) {
+      newErrors.partnershipAmount = "Amount cannot be less than Zero";
+    }
+    if (formData.givingsAmount < 0)
+      newErrors.givingsAmount = "Amount cannot be less than Zero";
     return newErrors;
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (
+    event: KeyboardEvent<HTMLInputElement> | FormEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
     const form = formRef.current;
 
@@ -127,7 +143,6 @@ const AddNew = () => {
 
     const validationErrors = validateField();
     setErrors(validationErrors);
-    console.log(errors);
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
 
@@ -137,7 +152,8 @@ const AddNew = () => {
         lastName: formData.lastName,
         Date: format(formData.Date, "yyyy-MM-dd"),
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
+        phoneNumber: formatPhoneNumber(formData.phoneNumber),
+        BirthDate: formData.BirthDate,
         partnerships: [
           {
             type: formData.partnershipsType,
@@ -151,6 +167,7 @@ const AddNew = () => {
           },
         ],
       };
+      console.log(formDataToSend);
       axios
         .put(
           "https://kingsrecord-backend.onrender.com/api/v1/form-data",
@@ -185,7 +202,6 @@ const AddNew = () => {
         });
     }
   };
-
   // Loading logic
   const [loader, setLoader] = useState(true);
   useEffect(() => {
@@ -207,6 +223,9 @@ const AddNew = () => {
               name="title"
               required
               label="Title"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               placeholder="e.g Brother, Sister"
               onChange={handleChange}
               value={formData.title}
@@ -219,6 +238,9 @@ const AddNew = () => {
               type="text"
               name="firstName"
               label="First Name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               placeholder="e.g David"
               required
               onChange={handleChange}
@@ -233,6 +255,9 @@ const AddNew = () => {
             <InputField
               type="text"
               name="lastName"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               label="Last Name"
               placeholder="e.g Maduabuchi"
               required
@@ -249,6 +274,9 @@ const AddNew = () => {
               label="Email"
               placeholder="e.g example@gmail.com"
               required
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               onChange={handleChange}
               value={formData.email}
             />
@@ -264,9 +292,12 @@ const AddNew = () => {
               label="Phone Number"
               placeholder="08164413182"
               required
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               minLength={11}
               onChange={handleChange}
-              value={formData.phoneNumber}
+              value={formatPhoneNumber(formData.phoneNumber)}
             />
             <span className="error-message">{errors.phoneNumber}</span>
           </div>
@@ -274,28 +305,16 @@ const AddNew = () => {
           <div>
             <InputField
               type="date"
-              name="birthdate"
+              name="BirthDate"
               max={today}
               label="Birth Date"
               required
               onChange={handleChange}
-              value={formData.Date}
+              value={formData.BirthDate}
             />
-            <span className="error-message">{errors.Date}</span>
+            <span className="error-message">{errors.BirthDate}</span>
           </div>
         </section>
-
-        <div className="date">
-          <InputField
-            type="date"
-            name="Date"
-            max={today}
-            label="Date"
-            onChange={handleChange}
-            value={formData.Date}
-          />
-          <span className="error-message">{errors.Date}</span>
-        </div>
       </form>
 
       <section className="optionsFieldSection">
@@ -318,6 +337,9 @@ const AddNew = () => {
               name="partnershipAmount"
               label=""
               placeholder="Amount(N)"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               onChange={handleChange}
               value={formData.partnershipAmount}
             />
@@ -345,6 +367,9 @@ const AddNew = () => {
               label=""
               placeholder="Amount(N)"
               onChange={handleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e);
+              }}
               value={formData.givingsAmount}
             />
             <span className="error-message">{errors.givingsAmount}</span>
@@ -352,6 +377,17 @@ const AddNew = () => {
         </div>
       </section>
 
+      <div className="date">
+        <InputField
+          type="date"
+          name="Date"
+          max={today}
+          label="Date of Giving"
+          onChange={handleChange}
+          value={formData.Date}
+        />
+        <span className="error-message">{errors.Date}</span>
+      </div>
       {loading ? (
         <div className="buttonContainer">
           <span className="loader"></span>
