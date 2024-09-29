@@ -16,9 +16,10 @@ const InputField: React.FC<InputFieldProps> = ({
     <div className="InputComponent">
       <label
         htmlFor={type}
-        className="block text-sm font-medium leading-6 text-[#2D3748]"
+        className="flex text-sm font-medium leading-6 text-[#2D3748]"
       >
         {label}
+        <span className="red-color ml-1">{otherProps.required && "*"}</span>
       </label>
       <div className="mt-2">
         <input

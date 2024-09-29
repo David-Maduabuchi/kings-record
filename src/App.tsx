@@ -5,6 +5,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  useLocation,
 } from "react-router-dom";
 import SignIn from "./pages/signin/SignIn";
 import Overview from "./pages/overview/Overview";
@@ -13,13 +14,28 @@ import "./styles/global.scss";
 import SignUp from "./pages/signup/Signup";
 import Navbar from "./components/navbar/Navbar";
 import Menu from "./components/menu/Menu";
-import AddData from "./pages/addData/AddData";
 import AuthGuard from "./AUTH/Auth";
 import Records from "./pages/records/Records";
 import NotFound from "./pages/PageNotFound/NotFound";
+import AddData from "./pages/AddData/AddData";
+import AllOptions from "./pages/AddData/AllOptions/AllOptions";
+import AddNew from "./pages/AddData/AddNew/AddNew";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import * as ACTIONS from "./store/actions/action_types"
+import UpdateGiving from "./pages/AddData/UpdateGiving/UpdateGiving";
+import UpdatePartnership from "./pages/AddData/UpdatePartnership/UpdatePartnership";
 
 const DashboardLayout = () => {
+   const dispatch = useDispatch();
+   const { pathname } = useLocation();
 
+   useEffect(() => {
+     window.scrollTo(0, 0);
+     dispatch({
+       type: ACTIONS.CLOSE_SIDEBAR,
+     }); // Scroll to the top of the page
+   }, [pathname, dispatch]);
   return (
     <div className="main">
       <div className="projcont ">
@@ -61,7 +77,16 @@ const router = createBrowserRouter(
       >
         <Route path="overview" element={<Overview />} />
         <Route path="records" element={<Records />} />
-        <Route path="add-data" element={<AddData />} />
+        <Route
+          path="add-data"
+          element={<Navigate to={"/admin-dashboard/add-data/all"} />}
+        />
+        <Route path="add-data" element={<AddData />}>
+          <Route path="all" element={<AllOptions />} />
+          <Route path="new-member" element={<AddNew />} />
+          <Route path="update-givings" element={<UpdateGiving />} />
+          <Route path="update-partnerships" element={<UpdatePartnership />} />
+        </Route>
       </Route>
       {/* Catch-all route for non-existing pages */}
       <Route path="*" element={<NotFound />} />

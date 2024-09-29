@@ -13,16 +13,15 @@ const Records = () => {
   const [initialData, setInitialData] = useState<TransformedData[]>([]);
   // const [dynamicData, setDynamicData] = useState(initialData) // this guy will be used for search operations
 
-    const dispatch = useDispatch();
-    const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
-    useEffect(() => {
-      window.scrollTo(0, 0);
-      dispatch({
-        type: ACTIONS.CLOSE_SIDEBAR,
-      }); // Scroll to the top of the page
-    }, [pathname, dispatch]);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch({
+      type: ACTIONS.CLOSE_SIDEBAR,
+    }); // Scroll to the top of the page
+  }, [pathname, dispatch]);
 
   const column = [
     {
@@ -109,8 +108,12 @@ const Records = () => {
       )}
 
       {/* <DataTable /> */}
-      <div className="recordsTable" >
-        {tableLoader ? <LoadingBar height="200px" /> : <DataTable column={column} rows={initialData}/>}
+      <div className="recordsTable">
+        {tableLoader ? (
+          <LoadingBar height="200px" />
+        ) : (
+          <DataTable column={column} rows={initialData} />
+        )}
       </div>
     </div>
   );

@@ -5,11 +5,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  .red-color {
+    color: red;
+    font-weight: 500;
+  }
 }
 
 // In here, I can design a custom scrollbar
 html {
-
   /* Total scrollbar track */
   &::-webkit-scrollbar {
     width: 12px; /* Width of the scrollbar */
@@ -40,10 +43,10 @@ html {
 }
 
 .menuContainer {
-@include sm {
-  position: fixed;
-  z-index: 1;
-} 
+  @include sm {
+    position: fixed;
+    z-index: 1;
+  }
 }
 
 .contentContainer {
@@ -60,6 +63,4 @@ html {
   height: auto;
   display: flex;
   flex-direction: column;
-
-    
 }

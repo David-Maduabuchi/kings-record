@@ -20,7 +20,7 @@ const Overview = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch({
+    dispatch({  
       type: ACTIONS.CLOSE_SIDEBAR,
     }); // Scroll to the top of the page
   }, [pathname, dispatch]);
@@ -94,7 +94,7 @@ const Overview = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoader(false);
-    }, 2000);
+    }, 1500);
   });
   if (loader) return <LoadingBar height="90vh" />;
 
