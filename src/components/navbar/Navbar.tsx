@@ -35,7 +35,7 @@ const Navbar = () => {
   return (
     <div className={`Navbar ${showNavbar ? "activeNav" : "hiddenNav"}`}>
       <div className="intro-box">
-        <h1>Welcome, Highly Esteemed</h1>
+        <h1>Welcome, {localStorage.getItem("username")}.</h1>
         <h5>{getFormattedDate()}</h5>
       </div>
       <div

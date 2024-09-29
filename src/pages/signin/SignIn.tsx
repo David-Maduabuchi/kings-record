@@ -88,6 +88,7 @@ export default function SignIn() {
         .then((res) => {
           const userToken = res.data.access_token;
           localStorage.setItem("userToken", userToken);
+          localStorage.setItem("username", res.data.firstName)
           setLoading(false);
           setSuccessMessage("Welcome back to Believers Love World");
           setToastType("success");
