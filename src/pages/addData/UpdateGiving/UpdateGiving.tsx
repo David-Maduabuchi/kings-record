@@ -22,7 +22,7 @@ const initialState = {
   firstName: "",
   lastName: "",
   Date: "",
-  BirthDate: "",
+  birthDate: "",
   email: "",
   phoneNumber: "",
   partnershipsType: "",
@@ -110,8 +110,8 @@ const UpdateGiving = () => {
       newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
       newErrors.phoneNumber = "Please provide a number.";
-    if (!formData.BirthDate)
-      newErrors.BirthDate = "When was this new soul born?";
+    if (!formData.birthDate)
+      newErrors.birthDate = "When was this new soul born?";
     if (formData.phoneNumber.length < 11) {
       newErrors.phoneNumber = "Please provide a valid phone number";
     }
@@ -153,7 +153,7 @@ const UpdateGiving = () => {
         Date: format(formData.Date, "yyyy-MM-dd"),
         email: formData.email,
         phoneNumber: formatPhoneNumber(formData.phoneNumber),
-        BirthDate: formData.BirthDate,
+        birthDate: formData.birthDate,
         partnerships: [
           {
             type: formData.partnershipsType,
@@ -170,7 +170,7 @@ const UpdateGiving = () => {
       console.log(formDataToSend);
       axios
         .put(
-          "https://kingsrecord-backend.onrender.com/api/v1/form-data",
+          "https://kingsrecord-backend.onrender.com/api/v1/add-member",
           formDataToSend,
           {
             headers: {
@@ -305,14 +305,14 @@ const UpdateGiving = () => {
           <div>
             <InputField
               type="date"
-              name="BirthDate"
+              name="birthDate"
               max={today}
               label="Birth Date"
               required
               onChange={handleChange}
-              value={formData.BirthDate}
+              value={formData.birthDate}
             />
-            <span className="error-message">{errors.BirthDate}</span>
+            <span className="error-message">{errors.birthDate}</span>
           </div>
         </section>
       </form>

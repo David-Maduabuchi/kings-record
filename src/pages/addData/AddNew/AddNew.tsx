@@ -15,14 +15,14 @@ import { useLocation } from "react-router-dom";
 import * as ACTIONS from "../../../store/actions/action_types";
 import Toast from "@/components/toast/Toast";
 import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
-import { format } from "date-fns";
 import { useDispatch } from "react-redux";
+import { format } from "date-fns";
 const initialState = {
   title: "",
   firstName: "",
   lastName: "",
   Date: "",
-  BirthDate: "",
+  birthDate: "",
   email: "",
   phoneNumber: "",
   partnershipsType: "",
@@ -110,8 +110,8 @@ const AddNew = () => {
       newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
       newErrors.phoneNumber = "Please provide a number.";
-    if (!formData.BirthDate)
-      newErrors.BirthDate = "When was this new soul born?";
+    if (!formData.birthDate)
+      newErrors.birthDate = "When was this new soul born?";
     if (formData.phoneNumber.length < 11) {
       newErrors.phoneNumber = "Please provide a valid phone number";
     }
@@ -150,10 +150,12 @@ const AddNew = () => {
         title: formData.title,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        Date: format(formData.Date, "yyyy-MM-dd"),
+        Date: formData.Date ? format(formData.Date, "yyyy-MM-dd") : "",
         email: formData.email,
         phoneNumber: formatPhoneNumber(formData.phoneNumber),
-        BirthDate: formData.BirthDate,
+        birthDate: formData.birthDate
+          ? format(formData.birthDate, "yyyy-MM-dd")
+          : "",
         partnerships: [
           {
             type: formData.partnershipsType,
@@ -168,8 +170,9 @@ const AddNew = () => {
         ],
       };
       console.log(formDataToSend);
+      console.log("formData", formData);
       axios
-        .put(
+        .post(
           "https://kingsrecord-backend.onrender.com/api/v1/form-data",
           formDataToSend,
           {
@@ -214,7 +217,7 @@ const AddNew = () => {
 
   return (
     <div className="AddNewContainer">
-      <header>Add to the Kingdom's Growth</header>
+      <header>Add New Member</header>
       <form ref={formRef} className="inputFieldContainer">
         <section className="row">
           <div>
@@ -295,7 +298,7 @@ const AddNew = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSubmit(e);
               }}
-              minLength={11}
+              maxLength={11}
               onChange={handleChange}
               value={formatPhoneNumber(formData.phoneNumber)}
             />
@@ -305,14 +308,14 @@ const AddNew = () => {
           <div>
             <InputField
               type="date"
-              name="BirthDate"
+              name="birthDate"
               max={today}
               label="Birth Date"
               required
               onChange={handleChange}
-              value={formData.BirthDate}
+              value={formData.birthDate}
             />
-            <span className="error-message">{errors.BirthDate}</span>
+            <span className="error-message">{errors.birthDate}</span>
           </div>
         </section>
       </form>
@@ -382,7 +385,7 @@ const AddNew = () => {
           type="date"
           name="Date"
           max={today}
-          label="Date of Giving"
+          label="Date of Giving/Partnership"
           onChange={handleChange}
           value={formData.Date}
         />
