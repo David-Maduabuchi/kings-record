@@ -15,6 +15,7 @@ const initialState = {
   firstName: "",
   lastName: "",
   Date: "",
+  BirthDate: "",
   email: "",
   phoneNumber: "",
   partnershipsType: "",
@@ -94,18 +95,17 @@ const AddNew = () => {
     const newErrors: { [key: string]: string } = {};
 
     if (!formData.firstName)
-      newErrors.firstName = "Just as God called people by name, what is yours?";
+      newErrors.firstName = "Adam named all things, yet this field has none";
+    if (!formData.title) newErrors.title = "No title provided  ";
     if (!formData.lastName)
-      newErrors.lastName = "The lineage matters - what is your surname?";
+      newErrors.lastName = "The lineage matters - provide a surname";
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email =
-        "As God sent messages to prophets, we need your email to reach you.";
+      newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
-      newErrors.phoneNumber =
-        "How will we call if the trumpet sounds? Please provide your number.";
-    if (!formData.Date)
-      newErrors.Date =
-        "In the beginning, God set a date – please provide yours.";
+      newErrors.phoneNumber = "Please provide a number.";
+    if (!formData.Date) newErrors.Date = "Date member was added";
+    if (!formData.BirthDate)
+      newErrors.BirthdDate = "When was this new soul born?";
     return newErrors;
   };
 
@@ -147,7 +147,7 @@ const AddNew = () => {
         givings: [
           {
             type: formData.givingsType,
-            amount:formData.givingsAmount   
+            amount: formData.givingsAmount,
           },
         ],
       };
@@ -198,78 +198,99 @@ const AddNew = () => {
 
   return (
     <div className="AddNewContainer">
+      <header>Add to the Kingdom's Growth</header>
       <form ref={formRef} className="inputFieldContainer">
-        <div>
-          <InputField
-            type="text"
-            name="title"
-            label="Title"
-            placeholder="e.g Brother, Sister"
-            onChange={handleChange}
-            value={formData.title}
-          />
-          <span className="error-message ">{errors.title}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="text"
+              name="title"
+              required
+              label="Title"
+              placeholder="e.g Brother, Sister"
+              onChange={handleChange}
+              value={formData.title}
+            />
+            <span className="error-message ">{errors.title}</span>
+          </div>
 
-        <div>
-          <InputField
-            type="text"
-            name="firstName"
-            label="First Name"
-            placeholder="e.g David"
-            required
-            onChange={handleChange}
-            value={formData.firstName}
-          />
-          <span className="error-message ">{errors.firstName}</span>
-        </div>
+          <div>
+            <InputField
+              type="text"
+              name="firstName"
+              label="First Name"
+              placeholder="e.g David"
+              required
+              onChange={handleChange}
+              value={formData.firstName}
+            />
+            <span className="error-message ">{errors.firstName}</span>
+          </div>
+        </section>
 
-        <div>
-          <InputField
-            type="text"
-            name="lastName"
-            label="Last Name"
-            placeholder="e.g Maduabuchi"
-            required
-            onChange={handleChange}
-            value={formData.lastName}
-          />
-          <span className="error-message ">{errors.lastName}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="text"
+              name="lastName"
+              label="Last Name"
+              placeholder="e.g Maduabuchi"
+              required
+              onChange={handleChange}
+              value={formData.lastName}
+            />
+            <span className="error-message ">{errors.lastName}</span>
+          </div>
 
-        <div>
-          <InputField
-            type="email"
-            name="email"
-            label="Email"
-            placeholder="e.g example@gmail.com"
-            required
-            onChange={handleChange}
-            value={formData.email}
-          />
-          <span className="error-message">{errors.email}</span>
-        </div>
+          <div>
+            <InputField
+              type="email"
+              name="email"
+              label="Email"
+              placeholder="e.g example@gmail.com"
+              required
+              onChange={handleChange}
+              value={formData.email}
+            />
+            <span className="error-message">{errors.email}</span>
+          </div>
+        </section>
 
-        <div>
-          <InputField
-            type="tel"
-            name="phoneNumber"
-            label="Phone Number"
-            placeholder="08164413182"
-            required
-            onChange={handleChange}
-            value={formData.phoneNumber}
-          />
-          <span className="error-message">{errors.phoneNumber}</span>
-        </div>
+        <section className="row">
+          <div>
+            <InputField
+              type="tel"
+              name="phoneNumber"
+              label="Phone Number"
+              placeholder="08164413182"
+              required
+              minLength={11}
+              onChange={handleChange}
+              value={formData.phoneNumber}
+            />
+            <span className="error-message">{errors.phoneNumber}</span>
+          </div>
 
-        <div>
+          <div>
+            <InputField
+              type="date"
+              name="birthdate"
+              max={today}
+              label="Birth Date"
+              required
+              onChange={handleChange}
+              value={formData.Date}
+            />
+            <span className="error-message">{errors.Date}</span>
+          </div>
+        </section>
+
+        <div className="date">
           <InputField
             type="date"
             name="Date"
             max={today}
             label="Date"
-            required
             onChange={handleChange}
             value={formData.Date}
           />
@@ -277,58 +298,60 @@ const AddNew = () => {
         </div>
       </form>
 
-      {/* Partnership Arms Section */}
-      <div className="optionsFieldContainer">
-        <h5 className="font-bold">Partnership Arms</h5>
+      <section className="optionsFieldSection">
+        <div className="optionsFieldContainer">
+          <h5 className="font-bold">Partnership Arms</h5>
 
-        <div>
-          <OptionsField
-            dataLabel="partnershipsType"
-            options={raphsodyOfRealitiesOptions}
-            onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
-            label="Select Partnership Arm"
-          />
-          <span className="error-message">{errors.partnershipsType}</span>
+          <div>
+            <OptionsField
+              dataLabel="partnershipsType"
+              options={raphsodyOfRealitiesOptions}
+              onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
+              label="Select Partnership Arm"
+            />
+            <span className="error-message">{errors.partnershipsType}</span>
+          </div>
+
+          <div>
+            <InputField
+              type="number"
+              name="partnershipAmount"
+              label=""
+              placeholder="Amount(N)"
+              onChange={handleChange}
+              value={formData.partnershipAmount}
+            />
+            <span className="error-message">{errors.partnershipAmount}</span>
+          </div>
         </div>
 
-        <div>
-          <InputField
-            type="number" 
-            name="partnershipAmount"
-            label=""
-            placeholder="Amount(N)"
-            onChange={handleChange}
-            value={formData.partnershipAmount}
-          />
-          <span className="error-message">{errors.partnershipAmount}</span>
-        </div>
-      </div>
+        {/* Givings Type Section */}
+        <div className="optionsFieldContainer">
+          <h5 className="font-bold">Givings Type</h5>
+          <div>
+            <OptionsField
+              dataLabel="givingsType"
+              onInputChange={handleOptionsChange}
+              options={givingsTypeOptions}
+              label={"Select Givings Type"}
+            />
+            <span className="error-message">{errors.givingsType}</span>
+          </div>
 
-      {/* Givings Type Section */}
-      <div className="optionsFieldContainer">
-        <h5 className="font-bold">Givings Type</h5>
-        <div>
-          <OptionsField
-            dataLabel="givingsType"
-            onInputChange={handleOptionsChange}
-            options={givingsTypeOptions}
-            label={"Select Givings Type"}
-          />
-          <span className="error-message">{errors.givingsType}</span>
+          <div>
+            <InputField
+              type="number"
+              name="givingsAmount"
+              label=""
+              placeholder="Amount(N)"
+              onChange={handleChange}
+              value={formData.givingsAmount}
+            />
+            <span className="error-message">{errors.givingsAmount}</span>
+          </div>
         </div>
+      </section>
 
-        <div>
-          <InputField
-            type="number"
-            name="givingsAmount"
-            label=""
-            placeholder="Amount(N)"
-            onChange={handleChange}
-            value={formData.givingsAmount}
-          />
-          <span className="error-message">{errors.givingsAmount}</span>
-        </div>
-      </div>
       {loading ? (
         <div className="buttonContainer">
           <span className="loader"></span>

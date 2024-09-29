@@ -8,14 +8,14 @@
   padding-right: 20px;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background: white;
 
   @include sm {
     width: 100%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding-left: 10px;
     border-bottom: 1px solid #e0e0e0;
-    height:60px;
+    height: 60px;
     position: fixed;
     transition: top 0.5s;
     z-index: 20;

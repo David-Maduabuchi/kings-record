@@ -202,16 +202,17 @@ const UpdateGiving = () => {
       <form ref={formRef} className="inputFieldContainer">
         <div>
           <InputField
-            type="email"
-            name="email"
-            label="Email"
-            placeholder="e.g example@gmail.com"
-            required
+            type="text"
+            name="title"
+            label="Title"
+            required  
+            placeholder="e.g Brother, Sister"
             onChange={handleChange}
-            value={formData.email}
+            value={formData.title}
           />
-          <span className="error-message">{errors.email}</span>
+          <span className="error-message ">{errors.title}</span>
         </div>
+
         <div>
           <InputField
             type="text"
@@ -240,6 +241,19 @@ const UpdateGiving = () => {
 
         <div>
           <InputField
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="e.g example@gmail.com"
+            required
+            onChange={handleChange}
+            value={formData.email}
+          />
+          <span className="error-message">{errors.email}</span>
+        </div>
+
+        <div>
+          <InputField
             type="tel"
             name="phoneNumber"
             label="Phone Number"
@@ -251,7 +265,7 @@ const UpdateGiving = () => {
           <span className="error-message">{errors.phoneNumber}</span>
         </div>
 
-        <div>
+        <div className="date">
           <InputField
             type="date"
             name="Date"
