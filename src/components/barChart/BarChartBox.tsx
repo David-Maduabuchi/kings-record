@@ -35,7 +35,7 @@ const BarChartBox = (props: Props) => {
         // Use Promise.all to handle multiple async requests
         const requests = months.map((month) =>
           axios.get(
-            `https://kingsrecord-backend.onrender.com/api/v1/${props.selectedOption.toLowerCase()}/${month}/${year}`,
+            `https://kingsrecordbackend-production.up.railway.app/api/v1/${props.selectedOption.toLowerCase()}/${month}/${year}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("userToken")}`,

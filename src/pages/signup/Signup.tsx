@@ -116,7 +116,7 @@ export default function SignUp() {
       setLoading(true);
       axios
         .post(
-          "https://kingsrecord-backend.onrender.com/api/v1/admin-register",
+          "https://kingsrecordbackend-production.up.railway.app/api/v1/admin-register",
           formDataToSend
         )
         .then(() => {

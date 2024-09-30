@@ -1,1 +1,44 @@
 // THIS CSS FILE IS USING ITS PARENT, ADDNEW
+.updateGivingsContainer {
+  display: flex;
+  flex-direction: column;
+  div.records-info {
+    margin-top: 0px;
+    margin-left: 55px;
+    background-color: #f8f9fc;
+    padding: 20px;
+    gap: 10px;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+    p {
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17.91px;
+      text-align: left;
+    }
+    button {
+      color: #50496a;
+      border-radius: 8px;
+      border: 1px solid #e5e0da;
+      width: 100px;
+      padding: 8px;
+      font-family: Inter;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16.7px;
+      background-color: #fefefd;
+    }
+  }
+
+  .error-message {
+    color: red;
+  }
+}
+.email-filler {
+  display: flex;
+  
+}

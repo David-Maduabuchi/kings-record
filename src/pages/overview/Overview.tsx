@@ -27,16 +27,16 @@ const Overview = () => {
   //Replace Data with Info from the Database
   const memberShipData = {
     title: "Total Members",
-    api: "https://kingsrecord-backend.onrender.com/api/v1/members",
+    api: "https://kingsrecordbackend-production.up.railway.app/api/v1/members",
   };
 
   const partnershipData = {
-    api: "https://kingsrecord-backend.onrender.com/api/v1/partnership-yearly/2024",
+    api: "https://kingsrecordbackend-production.up.railway.app/api/v1/partnership-yearly/2024",
     title: "Total Partnership this year",
   };
 
   const givingsData = {
-    api: "https://kingsrecord-backend.onrender.com/api/v1/givings-yearly/2024",
+    api: "https://kingsrecordbackend-production.up.railway.app/api/v1/givings-yearly/2024",
     title: "total givings this year",
   };
 

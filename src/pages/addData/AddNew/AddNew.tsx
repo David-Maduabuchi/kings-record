@@ -213,7 +213,7 @@ const AddNew = () => {
       // Proceed with API call
       axios
         .post(
-          "https://kingsrecord-backend.onrender.com/api/v1/add-member",
+          "https://kingsrecordbackend-production.up.railway.app/api/v1/add-member",
           formDataToSend,
           {
             headers: {
