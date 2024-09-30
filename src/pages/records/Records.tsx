@@ -40,14 +40,17 @@ const Records = () => {
     setTableLoader(true);
     const fetchTableData = async () => {
       await axios
-        .get("https://kingsrecord-backend.onrender.com/api/v1/spreadsheet", {
-          headers: {
-            Authorization: `Bearer ${localStorage
-              .getItem("userToken")
-              ?.toString()}`, // Add your token
-            "Content-Type": "application/json", // Set content type for FormData
-          },
-        })
+        .get(
+          "https://kingsrecordbackend-production.up.railway.app/api/v1/spreadsheet",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage
+                .getItem("userToken")
+                ?.toString()}`, // Add your token
+              "Content-Type": "application/json", // Set content type for FormData
+            },
+          }
+        )
         .then((res) => {
           setInitialData(transformThisData(res.data.data)); //transformDataToSomethign Suitable
         })
