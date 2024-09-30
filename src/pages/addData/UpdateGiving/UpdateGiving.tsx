@@ -279,7 +279,7 @@ const UpdateGiving = () => {
               />
               {emailLoader && <span className="loader"></span>}
             </div>
-            <div className="error-message">{errors.email}</div>
+            <div   className="error-message">{errors.email}</div>
           </div>
           <div>
             <InputField

@@ -38,7 +38,6 @@ export default function SignIn() {
       setLoginError(redirectionMessage);
       setTimeout(() => {
         setLoginError("");
-        localStorage.removeItem("userToken");
       }, 10000);
     }
   }, [redirectionMessage, dispatch]);
