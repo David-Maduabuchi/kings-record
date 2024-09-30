@@ -55,14 +55,13 @@ const UpdatePartnership = () => {
   // Sample data based on your backend requirements
   const [formData, setFormData] = useState(initialState);
 
-   const raphsodyOfRealitiesOptions = [
-     "Rhapsody of Realities",
-     "Healings Streams",
-     "Campus Ministry",
-     "InnerCity Missions",
-     "Ministry Programs",
-   ];
-
+  const raphsodyOfRealitiesOptions = [
+    "Rhapsody of Realities",
+    "Healings Streams",
+    "Campus Ministry",
+    "InnerCity Missions",
+    "Ministry Programs",
+  ];
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -144,7 +143,7 @@ const UpdatePartnership = () => {
         Date: format(new Date(formData.Date), "yyyy-MM-dd"), // Format the date correctly
         email: formData.email.toLowerCase(),
         phoneNumber: formatPhoneNumber(formData.phoneNumber), // Format phone number properly
-        givings: [
+        partnerships: [
           {
             type: formData.partnershipsType,
             amount: parseInt(formData.partnershipAmount, 10), // Ensure the amount is an integer
@@ -154,7 +153,7 @@ const UpdatePartnership = () => {
       console.log(formDataToSend);
       axios
         .post(
-          "https://kingsrecordbackend-production.up.railway.app/api/v1/givings-register",
+          "https://kingsrecordbackend-production.up.railway.app/api/v1/partnership-register",
           formDataToSend,
           {
             headers: {
@@ -364,7 +363,9 @@ const UpdatePartnership = () => {
       <section className="optionsFieldSection">
         {/* Givings Type Section */}
         <div className="optionsFieldContainer">
-          <h5 className="font-bold">Partnership Arms <span className="red-color">*</span></h5>
+          <h5 className="font-bold">
+            Partnership Arms <span className="red-color">*</span>
+          </h5>
 
           <div>
             <OptionsField
