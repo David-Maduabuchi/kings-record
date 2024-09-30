@@ -99,7 +99,7 @@ const UpdateGiving = () => {
       newErrors.email = "We need a valid email to fellowship  .";
     if (!formData.phoneNumber)
       newErrors.phoneNumber = "Please provide a number.";
-    
+
     if (!formData.Date) newErrors.Date = "Please provide a date";
     if (formData.phoneNumber.length < 11) {
       newErrors.phoneNumber = "Please provide a valid phone number";
@@ -140,13 +140,13 @@ const UpdateGiving = () => {
         title: formData.title,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        Date: format(formData.Date, "yyyy-MM-dd"),
-        email: formData.email,
-        phoneNumber: formatPhoneNumber(formData.phoneNumber),
+        Date: format(new Date(formData.Date), "yyyy-MM-dd"), // Format the date correctly
+        email: formData.email.toLowerCase(),
+        phoneNumber: formatPhoneNumber(formData.phoneNumber), // Format phone number properly
         givings: [
           {
             type: formData.givingsType,
-            amount: formData.givingsAmount,
+            amount: parseInt(formData.givingsAmount, 10), // Ensure the amount is an integer
           },
         ],
       };
@@ -196,13 +196,13 @@ const UpdateGiving = () => {
       }));
       return; // Exit the function early
     }
-    setErrors({})
+    setErrors({});
 
     setEmailLoader(true);
     // Send the email as a query parameter using axios
     axios
       .get(
-        `https://kingsrecordbackend-production.up.railway.app/api/v1/verify-member/${formEmail}`,
+        `https://kingsrecordbackend-production.up.railway.app/api/v1/verify-member/${formEmail.toLowerCase()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
@@ -211,7 +211,7 @@ const UpdateGiving = () => {
       )
       .then((response) => {
         const memberData = response.data.data;
-        console.log(response.data.data)
+        console.log(response.data.data);
         // Fill the form fields based on the response data
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -219,19 +219,19 @@ const UpdateGiving = () => {
           lastName: memberData.lastName || "",
           phoneNumber: formatPhoneNumber(memberData.phoneNumber) || "",
           birthDate: memberData.birthDate || "",
-          title: memberData.title || ""
+          title: memberData.title || "",
         }));
       })
       .catch((error) => {
-        console.error("Axios error:", error.message);
-        console.log(error.response.data.error)
-        if(error.response.data.error === "Member not found in database") {
-           setErrors((prevErrors) => ({
-             ...prevErrors,
-             email: "This user was not found, proceed to the add new member section and try again",
-           }));
+        console.log(error.response);
+        if (error.response.data.error === "Member not found in database") {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email:
+              "This user was not found, proceed to the add new member section and try again",
+          }));
         }
-        setFormData(initialState)
+
         // Optionally, handle the error by setting an error message
       })
       .finally(() => {
@@ -277,9 +277,13 @@ const UpdateGiving = () => {
                 onChange={handleChange}
                 value={formData.email}
               />
-              {emailLoader && <span className="loader"></span>}
+              {emailLoader && (
+                <div className="loaderContainer">
+                  <div className="email-loader"></div>
+                </div>
+              )}
             </div>
-            <div   className="error-message">{errors.email}</div>
+            <div className="error-message">{errors.email}</div>
           </div>
           <div>
             <InputField
@@ -353,16 +357,18 @@ const UpdateGiving = () => {
             />
             <span className="error-message">{errors.phoneNumber}</span>
           </div>
-
-          </section>
+        </section>
       </form>
 
       <section className="optionsFieldSection">
         {/* Givings Type Section */}
         <div className="optionsFieldContainer">
-          <h5 className="font-bold">Givings Type <span className="red-color">*</span></h5>
+          <h5 className="font-bold">
+            Givings Type <span className="red-color">*</span>
+          </h5>
           <div>
             <OptionsField
+              value={formData.givingsType}
               dataLabel="givingsType"
               onInputChange={handleOptionsChange}
               options={givingsTypeOptions}
@@ -406,17 +412,8 @@ const UpdateGiving = () => {
         </div>
       ) : (
         <div className="buttonContainer">
-          <button
-            onClick={() => {
-              setErrors({});
-              setFormData(initialState);
-            }}
-            className="cancel"
-          >
-            Clear
-          </button>
-          <button onClick={handleSubmit} className="save">
-            Update Now  
+          <button onClick={handleSubmit} className="save p-4">
+            Update Now
           </button>
         </div>
       )}

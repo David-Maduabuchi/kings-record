@@ -376,6 +376,7 @@ const AddNew = () => {
 
           <div>
             <OptionsField
+            value={formData.partnershipsType}
               dataLabel="partnershipsType"
               options={raphsodyOfRealitiesOptions}
               onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
@@ -405,6 +406,7 @@ const AddNew = () => {
           <h5 className="font-bold">Givings Type</h5>
           <div>
             <OptionsField
+            value={formData.givingsType}
               dataLabel="givingsType"
               onInputChange={handleOptionsChange}
               options={givingsTypeOptions}
