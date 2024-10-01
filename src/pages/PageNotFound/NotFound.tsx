@@ -22,7 +22,7 @@ const NotFound: React.FC = () => {
 
                 <p>The page you are looking for does not exist☹️!</p>
 
-                <NavLink to="/admin/dashboard" className="link_404">
+                <NavLink to="/admin-dashboard" className="link_404">
                   Go to Home
                 </NavLink>
               </div>
