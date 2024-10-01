@@ -17,14 +17,14 @@ import Menu from "./components/menu/Menu";
 import AuthGuard from "./AUTH/Auth";
 import Records from "./pages/records/Records";
 import NotFound from "./pages/PageNotFound/NotFound";
-import AddData from "./pages/AddData/AddData";
-import AllOptions from "./pages/AddData/AllOptions/AllOptions";
-import AddNew from "./pages/AddData/AddNew/AddNew";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import * as ACTIONS from "./store/actions/action_types"
-import UpdateGiving from "./pages/AddData/UpdateGiving/UpdateGiving";
-import UpdatePartnership from "./pages/AddData/UpdatePartnership/UpdatePartnership";
+import AddData from "./pages/addData/AddData";
+import AllOptions from "./pages/addData/AllOptions/AllOptions";
+import AddNew from "./pages/addData/AddNew/AddNew";
+import UpdateGiving from "./pages/addData/UpdateGiving/UpdateGiving";
+import UpdatePartnership from "./pages/addData/UpdatePartnership/UpdatePartnership";
 
 const DashboardLayout = () => {
    const dispatch = useDispatch();
