@@ -16,4 +16,6 @@ export const OPEN_SIDEBAR = "OPEN_SIDEBAR";
 
 export const CLOSE_SIDEBAR = "CLOSE_SIDEBAR";
 
-export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR"
+export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
+
+export const ADD_EMAIL_TO_DB = "ADD_EMAIL_TO_DB";

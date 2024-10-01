@@ -15,8 +15,9 @@ import { useLocation } from "react-router-dom";
 import * as ACTIONS from "../../../store/actions/action_types";
 import Toast from "@/components/toast/Toast";
 import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
+import { RootState } from "@/interface/general";
 
 interface Partnership {
   type: string;
@@ -60,15 +61,12 @@ const AddNew = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const formRef = useRef<HTMLFormElement>(null);
   const today = new Date().toISOString().split("T")[0];
-
-  // DEFINE FORM DATA
-  // DELETE OPTIONS FIELD
-  // UPDATE FORM DATA CORRECTLY
-  // UPDATE THE VALIDATE ERRORRS
-  // ENABLE PUT REQUEST
-  // STYING
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const redirectEmail = useSelector((state: RootState) => {
+    return state.auth_reducer.redirectEmail;
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,9 +75,16 @@ const AddNew = () => {
     }); // Scroll to the top of the page
   }, [pathname, dispatch]);
 
-  // Sample data based on your backend requirements
-  const [formData, setFormData] = useState(initialState);
+  useEffect(() => {
+    if (redirectEmail) {
+      setFormData((prevFormData) => ({
+        ...prevFormData, // Keep previous form data
+        email: redirectEmail, // Update only the email field
+      }));
+    }
+  }, [redirectEmail]);
 
+  // Sample data based on your backend requirements
   const raphsodyOfRealitiesOptions = [
     "Rhapsody of Realities",
     "Healings Streams",
@@ -216,7 +221,7 @@ const AddNew = () => {
           "https://kingsrecordbackend-production.up.railway.app/api/v1/add-member",
           formDataToSend,
           {
-            headers: {
+              headers: {
               Authorization: `Bearer ${localStorage
                 .getItem("userToken")
                 ?.toString()}`,
@@ -376,7 +381,7 @@ const AddNew = () => {
 
           <div>
             <OptionsField
-            value={formData.partnershipsType}
+              value={formData.partnershipsType}
               dataLabel="partnershipsType"
               options={raphsodyOfRealitiesOptions}
               onInputChange={handleOptionsChange} // Pass handleOptionsChange function from parent
@@ -406,7 +411,7 @@ const AddNew = () => {
           <h5 className="font-bold">Givings Type</h5>
           <div>
             <OptionsField
-            value={formData.givingsType}
+              value={formData.givingsType}
               dataLabel="givingsType"
               onInputChange={handleOptionsChange}
               options={givingsTypeOptions}
@@ -454,11 +459,11 @@ const AddNew = () => {
               setErrors({});
               setFormData(initialState);
             }}
-            className="cancel"
+            className="cancel p-3"
           >
             Clear
           </button>
-          <button onClick={handleSubmit} className="save">
+          <button onClick={handleSubmit} className="save p-3">
             Save
           </button>
         </div>

@@ -230,6 +230,11 @@ const UpdateGiving = () => {
             email:
               "This user was not found, proceed to the add new member section and try again",
           }));
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Check your internet connection and try again",
+          }));
         }
 
         // Optionally, handle the error by setting an error message

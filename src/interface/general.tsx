@@ -4,6 +4,7 @@ interface AuthState {
   is_authenticated: boolean;
   profile: Profile;
   redirectionMessage: string;
+  redirectEmail: string;
 }
 interface Sidebar {
   isSidebarOpen: boolean

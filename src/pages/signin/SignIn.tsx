@@ -84,7 +84,7 @@ export default function SignIn() {
         .post(
           "https://kingsrecordbackend-production.up.railway.app/api/v1/admin-login",
           formData
-        ) 
+        )
         .then((res) => {
           const userToken = res.data.access_token;
           localStorage.setItem("userToken", userToken);
@@ -105,12 +105,31 @@ export default function SignIn() {
             setToastType(""); // Reset after navigation
           }, 3000);
         })
-        .catch((err) => {
-          if (err.response.data.error === "Invalid email or password") {
-            setPasswordError("This password is not in the book of life");
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.data.error === "Invalid email or password") {
+              setPasswordError("This password is not in the book of life");
+            } else {
+              // User not found error
+              setEmailError("This email is not among the sheep of the lord");
+            }
+          } else if (error.code === "ECONNABORTED") {
+            // Handle timeout error
+            setEmailError(
+              "The request took too long to complete. Please check your network connection and try again."
+            );
+          } else if (error.request) {
+            setEmailError(
+              "No response from the server. Please check your network."
+            );
+          } else if (error.message.includes("ERR_NAME_NOT_RESOLVED")) {
+            setEmailError(
+              "The server address could not be found. Please check the URL."
+            );
           } else {
-            // User not found error
-            setEmailError("This email is not among the sheep of the lord");
+            setEmailError(
+              "An unexpected error occurred. Please try again later."
+            );
           }
           setLoading(false);
           setToastType("error");
@@ -118,6 +137,7 @@ export default function SignIn() {
             setToastType(""); // Reset toast on error
           }, 5000);
         })
+
         .finally(() => {
           console.log("Signin Complete");
           setTimeout(() => {
@@ -187,7 +207,6 @@ export default function SignIn() {
                     label="Password"
                     placeholder="Enter your password"
                     required
-                    
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);

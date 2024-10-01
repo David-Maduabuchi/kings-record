@@ -58,6 +58,13 @@ export const close_sidebar = () => {
   };
 };
 
+export const add_email_to_db = (action: string) => {
+  return {
+    type: ACTION_TYPES.ADD_EMAIL_TO_DB,
+    payload: action
+  }
+};
+
 // export const remove_profile = () => {
 //   return {
 //     type: ACTION_TYPES.REMOVE_PROFILE,

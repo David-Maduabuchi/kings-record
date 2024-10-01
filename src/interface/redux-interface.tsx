@@ -1,4 +1,5 @@
 import * as ACTION_TYPES from "../store/actions/action_types";
+
 export interface Profile {
   uid: string | number;
   job_description: string;
@@ -24,12 +25,17 @@ interface RedirectMessage {
   type: typeof ACTION_TYPES.REDIRECT_MESSAGE;
   payload: string;
 }
+interface RedirectEmail {
+  type: typeof ACTION_TYPES.ADD_EMAIL_TO_DB;
+  payload: string;
+}
 
 export type AuthActionTypes =
   | LoginSuccessAction
   | LoginFailureAction
   | AddProfileAction
-  | RedirectMessage;
+  | RedirectMessage
+  | RedirectEmail;
 // this reducer is set to update the redux store on the current state of the user
 
 interface OPEN_SIDEBAR {

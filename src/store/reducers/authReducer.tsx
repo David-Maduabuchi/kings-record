@@ -4,7 +4,8 @@ import * as ACTION_TYPES from "../actions/action_types";
 const initialState = {
   is_authenticated: false,
   profile: null,
-  redirectionMessage: ""
+  redirectionMessage: "",
+  redirectEmail: "",
 };
 
 const AuthReducer = (state = initialState, action: AuthActionTypes) => {
@@ -24,6 +25,11 @@ const AuthReducer = (state = initialState, action: AuthActionTypes) => {
       return {
         ...state,
         redirectionMessage: action.payload
+      }
+    case ACTION_TYPES.ADD_EMAIL_TO_DB:
+      return {
+        ...state,
+        redirectEmail: action.payload
       }
     default:
       return state;

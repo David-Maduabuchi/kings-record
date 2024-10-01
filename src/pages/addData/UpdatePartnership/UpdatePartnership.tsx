@@ -10,7 +10,7 @@ import LoadingBar from "@/components/LoadingBar/LoadingBar";
 import InputField from "@/components/inputField/InputField";
 import OptionsField from "@/components/optionsField/OptionField";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as ACTIONS from "../../../store/actions/action_types";
 import Toast from "@/components/toast/Toast";
 import { formatPhoneNumber, smoothScrollTo } from "@/interface/functions";
@@ -29,12 +29,17 @@ const initialState = {
 const UpdatePartnership = () => {
   const [toastType, setToastType] = useState("");
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(true);
+  const [redirectButton, setRedirectButton] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const formRef = useRef<HTMLFormElement>(null);
   const today = new Date().toISOString().split("T")[0];
   const newErrors: { [key: string]: string } = {};
+  const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   // DEFINE FORM DATA
   // DELETE OPTIONS FIELD
@@ -42,8 +47,6 @@ const UpdatePartnership = () => {
   // UPDATE THE VALIDATE ERRORRS
   // ENABLE PUT REQUEST
   // STYING
-  const dispatch = useDispatch();
-  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,8 +55,14 @@ const UpdatePartnership = () => {
     }); // Scroll to the top of the page
   }, [pathname, dispatch]);
 
+  const handleRedirectToAdd = (redirectEMail: string) => {
+    dispatch({
+      type: ACTIONS.ADD_EMAIL_TO_DB,
+      payload: redirectEMail,
+    });
+    navigate("/admin-dashboard/add-data/new-member");
+  };
   // Sample data based on your backend requirements
-  const [formData, setFormData] = useState(initialState);
 
   const raphsodyOfRealitiesOptions = [
     "Rhapsody of Realities",
@@ -64,6 +73,8 @@ const UpdatePartnership = () => {
   ];
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRedirectButton(false);
+
     const { name, value } = event.target;
     setFormData({
       ...formData,
@@ -180,6 +191,47 @@ const UpdatePartnership = () => {
             setToastType("");
           }, 5000);
         })
+        .catch((error) => {
+          console.log(error);
+
+          // Handle different types of errors
+          if (error.response) {
+            // 4xx or 5xx status code
+            if (error.response.data.error === "Member not found in database") {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email:
+                  "This user was not found, proceed to the add new member section and try again.",
+              }));
+              setRedirectButton(true);
+            } else {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email:
+                  "There was an issue verifying the email. Please try again.",
+              }));
+            }
+          } else if (error.request) {
+            // No response received after request was sent
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: "No response from the server. Please check your network.",
+            }));
+          } else if (error.message.includes("ERR_NAME_NOT_RESOLVED")) {
+            // Domain resolution error
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email:
+                "The server address could not be found. Please check the URL.",
+            }));
+          } else {
+            // Other unexpected errors
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: "An unexpected error occurred. Please try again later.",
+            }));
+          }
+        })
         .finally(() => {
           setLoading(false);
         });
@@ -188,18 +240,18 @@ const UpdatePartnership = () => {
   const [emailLoader, setEmailLoader] = useState(false);
 
   const handleFormFiller = (formEmail: string) => {
-    // Check if email is empty
     if (!formEmail || !/\S+@\S+\.\S+/.test(formEmail)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         email: "A valid email is required.",
       }));
-      return; // Exit the function early
+      return;
     }
-    setErrors({});
+    setErrors({}); // Reset errors before the request
 
     setEmailLoader(true);
-    // Send the email as a query parameter using axios
+
+    // Create an axios request with a 10-second timeout
     axios
       .get(
         `https://kingsrecordbackend-production.up.railway.app/api/v1/verify-member/${formEmail.toLowerCase()}`,
@@ -207,6 +259,7 @@ const UpdatePartnership = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
+          timeout: 10000, // Timeout set to 10 seconds (10,000 milliseconds)
         }
       )
       .then((response) => {
@@ -223,20 +276,72 @@ const UpdatePartnership = () => {
         }));
       })
       .catch((error) => {
-        console.log(error.response);
-        if (error.response.data.error === "Member not found in database") {
+        console.log(error);
+
+        // Handle different types of errors
+        if (error.response) {
+          // 4xx or 5xx status code
+          if (error.response.data.error === "Member not found in database") {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email:
+                "This user was not found, proceed to the add new member section and try again.",
+            }));
+            setRedirectButton(true);
+          } else {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email:
+                "There was an issue verifying the email. Please try again.",
+            }));
+          }
+        } else if (error.code === "ECONNABORTED") {
+          // Handle timeout error
           setErrors((prevErrors) => ({
             ...prevErrors,
             email:
-              "This user was not found, proceed to the add new member section and try again",
+              "The request took too long to complete. Please check your network connection and try again.",
+          }));
+        } else if (error.request) {
+          // No response received after request was sent
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "No response from the server. Please check your network.",
+          }));
+        } else if (error.message.includes("ERR_NAME_NOT_RESOLVED")) {
+          // Domain resolution error
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email:
+              "The server address could not be found. Please check the URL.",
+          }));
+        } else {
+          // Other unexpected errors
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "An unexpected error occurred. Please try again later.",
           }));
         }
-
-        // Optionally, handle the error by setting an error message
       })
       .finally(() => {
-        setEmailLoader(false);
+        setEmailLoader(false); // Stop the loader after request finishes
       });
+  };
+
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
+  const handleFormRelations = (event: ChangeEvent<HTMLInputElement>) => {
+    const searchMail = event.target.value;
+
+    // Clear any existing timeout
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+
+    // Set a new timeout to handle the delayed API call
+    timeoutId.current = setTimeout(() => {
+      handleFormFiller(searchMail);
+    }, 1000); // Delay of 1 second
+
   };
 
   // Loading logic
@@ -255,8 +360,7 @@ const UpdatePartnership = () => {
       {isInfoBoxOpen && (
         <div className="records-info">
           <p>
-            After typing an email, hit the enter key in the email field to
-            automatically fill the form.
+            Auto Form Fill, just type in the email and the form auto fills.
           </p>
           <button onClick={() => setIsInfoBoxOpen(false)}>Okay, got it!</button>
         </div>
@@ -274,9 +378,19 @@ const UpdatePartnership = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleFormFiller(formData.email);
                 }}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  handleFormRelations(e);
+                }}
                 value={formData.email}
               />
+              {redirectButton && (
+                <div className="redirectButton">
+                  <button onClick={() => handleRedirectToAdd(formData.email)}>
+                    Add User
+                  </button>
+                </div>
+              )}
               {emailLoader && (
                 <div className="loaderContainer">
                   <div className="email-loader"></div>
