@@ -1,0 +1,39 @@
+@import "../../styles/responsive.scss";
+
+.MenuButtonsContainer {
+  color: inherit;
+  width: 100%;
+  padding: 10px;
+
+  .menuButtons {
+    display: flex;
+    gap: 12px;
+    
+    button {
+      display: flex;
+      font-family: "Poppins";
+      align-items: center;
+      gap: 10px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      font-family: Poppins;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: inherit;
+
+      @include sm {
+        font-size: 12px;
+        text-align: left;
+      }
+
+      img {
+        @include sm {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}

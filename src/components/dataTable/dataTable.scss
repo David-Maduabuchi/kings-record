@@ -1,0 +1,141 @@
+@import "../../styles/variable.scss";
+@import "../../styles/responsive.scss";
+.dataTableContainer {
+  height: auto;
+
+  table {
+    width: 100%;
+    thead {
+      border-collapse: collapse;
+
+      tr {
+        height: 45px;
+        th {
+          font-family: Inter;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 20px;
+          text-align: left;
+          background-color: #e9efff;
+          padding: 0 10px;
+          @include sm {
+            font-size: 6px;
+            font-weight: 800;
+            padding: 0 6px;
+          }
+        }
+
+        th.first-row {
+          width: 50px;
+          text-align: center;
+          border-top-left-radius: 10px;
+        }
+        th.second-row {
+          border-top-left-radius: 10px;
+
+          @include sm {
+            display: none;
+          }
+        }
+        th.fifth-row {
+          @include sm {
+            display: none;
+          }
+        }
+        th.ninth-row {
+          @include sm {
+            display: none;
+          }
+        }
+        th.icon {
+          border-top-right-radius: 10px;
+          padding-left: auto;
+          img {
+            margin: auto;
+            width: 5px;
+            height: 12px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        height: 60px;
+        &:nth-child(even) {
+          background-color: #e9efff;
+        }
+        td {
+          font-family: Poppins;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 20px;
+          text-align: left;
+          padding: 0 10px;
+          height: 40px;
+          align-items: center;
+          padding-left: 10px;
+          @include sm {
+            font-size: 6px;
+          }
+        }
+        td.first-row {
+          text-align: center;
+        }
+        td.second-row {
+          @include sm {
+            display: none;
+          }
+        }
+
+        td.fifth-row {
+          font-size: 12px;
+          @include sm {
+            font-size: 8px;
+            display: none;
+          }
+        }
+        td.ninth-row {
+          @include sm {
+            display: none;
+          }
+        }
+
+        td.icon {
+          border-top-right-radius: 10px;
+          padding-left: auto;
+          img {
+            margin: auto;
+            width: 5px;
+            height: 12px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+.spread-sheet-no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  gap: 30px;
+  padding-top: 100px;
+
+  img {
+    width: 137px;
+    height: 85px;
+  }
+  span {
+    font-family: "Inter";
+    font-size: 14.8px;
+    font-weight: 600;
+    line-height: 17.91px;
+    color: #b5b7be;
+    text-align: left;
+  }
+}

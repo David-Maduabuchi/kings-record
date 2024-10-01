@@ -1,0 +1,186 @@
+@import "../../styles/responsive.scss";
+
+// I am making the dropdown general by removing it ffrom its nested tree, nested tree us below
+.dropdownContainer {
+  display: flex;
+  margin-left: auto;
+  gap: 8px;
+  align-items: center;
+
+  span.category {
+    color: #505e80;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Inter, Poppins;
+
+    @include sm {
+      display: none;
+    }
+  }
+  .dropdown {
+    border-radius: 8px;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+
+    .dropdown-button {
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #e6e8ea;
+      cursor: pointer;
+      width: 150px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      @include sm {
+        width: 120px;
+      }
+      span {
+        font-family: Inter;
+        font-size: 14px;
+        font-weight: 400;
+        @include sm {
+          font-size: 10px;
+        }
+      }
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      list-style-type: none;
+      padding: 0;
+      background-color: #e6e8ea;
+      margin: 0;
+      margin-top: 5px;
+      width: 150px;
+      border-radius: 8px;
+      @include sm {
+        width: 120px;
+      }
+      li {
+        padding: 8px;
+        cursor: pointer;
+        background-color: #e6e8ea;
+        &:hover {
+          background-color: #f0f0f0;
+          span {
+            color: black;
+            font-weight: 500;
+          }
+        }
+        &:first-child {
+          border-radius: 8px 8px 0 0;
+        }
+        &:last-child {
+          border-radius: 0 0 8px 8px;
+        }
+
+        span {
+          font-family: Poppins;
+        }
+      }
+      .option {
+        font-family: Inter, Poppins;
+        font-size: 12px;
+        font-weight: 400;
+        color: #2b2b2b;
+        @include sm {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+.overview {
+  header {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+    color: #616770;
+  }
+
+  .cardContainer {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+
+    @include sm {
+      flex-direction: column;
+    }
+  }
+
+  section.graphContainer {
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    margin-top: 30px;
+    height: 600px;
+
+    @include sm {
+      height: 500px;
+    }
+    div.graphHeader {
+      width: 100%;
+      height: 90px;
+      padding: 10px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @include sm {
+        padding: 0;
+      }
+      .graphInfo {
+        h3 {
+          font-family: Inter;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: left;
+          color: #9ba0b0;
+
+          @include sm {
+            font-size: 14px;
+          }
+        }
+        h5 {
+          color: #3f4e75;
+          font-family: Inter;
+          font-size: 17px;
+          font-weight: 600;
+          line-height: 20.57px;
+          text-align: left;
+          @include sm {
+            font-size: 8px;
+          }
+        }
+      }
+    }
+
+    div.main-graph {
+      background-color: #fff;
+      width: 100%;
+      height: 470px;
+      padding: 10px;
+      opacity: 0px;
+      margin-top: 30px;
+      display: flex;
+      border-radius: 10px;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      @include sm {
+        margin-top: 20px;
+        padding: 0;
+        height: 350px;
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "../.../../../styles/responsive.scss";
+.signupContainer {
+  height: auto;
+  display: flex;
+  @include sm {
+    flex-direction: column;
+    height: 1500px;
+  }
+
+  .backgroundImage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: url("/public/images/Image.png");
+    object-fit: cover;
+    @include sm {
+      height: 100%;
+    }
+    .content {
+      margin-top: 200px;
+      font-family: Poppins;
+      background: transparent;
+      position: fixed;
+
+      @include sm {
+        position: relative;
+        margin-top: 0;
+      }
+      div.header {
+        @include sm {
+          margin-top: 40px;
+          text-align: left;
+        }
+
+        h2 {
+          @include sm {
+            font-size: 26px;
+          }
+        }
+        p {
+          @include sm {
+            font-size: 10px;
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .formContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    @include sm {
+      position: absolute;
+      background-color: transparent;
+      top: 40%;
+    }
+    form {
+      width: 350px;
+      margin: 100px 0;
+      font-family: Poppins, sans-serif;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: #fff;
+      @include sm {
+        margin: 0;
+        width: 90vw;
+        margin: 0 auto;
+        border-radius: 20px;
+        padding: 10px;
+      }
+      div {
+        span {
+          height: 10px;
+          width: 100%;
+          font-size: 12px;
+          color: #ff3535;
+          margin-left: 10px;
+          margin-top: 5px;
+
+          @include sm {
+            font-size: 10px;
+          }
+        }
+      }
+
+      //Loader
+      .loader {
+        width: 40px;
+        height: 40px;
+        border: 3px dotted #fff;
+        border-style: solid solid dotted dotted;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        box-sizing: border-box;
+        animation: rotation 2s linear infinite;
+      }
+      .loader::after {
+        content: "";
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        border: 3px dotted #fff;
+        border-style: solid solid dotted;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        animation: rotationBack 1s linear infinite;
+        transform-origin: center center;
+      }
+
+      @keyframes rotation {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes rotationBack {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+
+      span.login-success {
+        font-size: 12px;
+        font-family: Poppins;
+        height: 12px;
+        @include sm {
+          font-size: 10px;  
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+@import "../../styles/responsive.scss";
+
+.Navbar {
+  width: 100%;
+  height: 106px;
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+
+  @include sm {
+    width: 100%;
+    padding-left: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    height: 60px;
+    position: fixed;
+    transition: top 0.5s;
+    z-index: 20;
+  }
+
+  .intro-box {
+    width: 470px;
+    @include sm {
+      width: auto;
+      display: none;
+    }
+    h1 {
+      font-family: Inter, Poppins, sans-serif;
+      font-size: 24px;
+      font-weight: bolder;
+      @include sm {
+        font-size: 18px;
+      }
+    }
+    h5 {
+      font-family: Inter, Poppins, sans-serif;
+      color: #72777b;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 19.2px;
+      letter-spacing: 0.5px;
+      text-align: left;
+    }
+  }
+  .sidebarIcon {
+    display: none;
+    margin-left: 10px;
+    @include sm {
+      display: block;
+      img {
+        width: 38px;
+        height: 38px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .input-profile-cont {
+    display: flex;
+    gap: 10px;
+    // width: 100%; reactivate if you uncomment the other code
+    justify-content: space-between;
+    align-items: center;
+    .header-search-box {
+      border: 1px solid #e7eaee;
+      width: 500px;
+      height: 48px;
+      border-radius: 10px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      background: #f6f4f7;
+
+      img {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+
+      input {
+        font-size: 14px;
+        outline: none;
+        color: rgb(73, 73, 73);
+        padding: 10px;
+        width: 100%;
+        border-radius: 20px;
+        background: transparent;
+      }
+    }
+    .profile-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      img {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        @include sm {
+          display: none;
+        }
+      }
+      img.profile-img {
+        object-fit: cover;
+        height: auto;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        @include sm {
+          display: flex;
+        }
+      }
+    }
+  }
+}
+
+.Navbar.activeNav {
+  top: 0;
+}
+.Navbar.hiddenNav {
+  top: -62px;
+}

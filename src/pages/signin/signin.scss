@@ -1,0 +1,168 @@
+@import "../../styles/responsive.scss";
+// Tailwindcss overwrites all other css files, If a feature isnt working, it is probably tailwind at work. Ciao.
+
+div.signinContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  height: 100vh;
+  margin: 0;
+  @include sm {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .firstColumn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include sm {
+      height: 900px;
+      display: block;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 64px;
+      height: 300px;
+      text-align: center;
+      @include sm {
+        height: 250px;
+        margin-top: 20px;
+        h2 {
+          font-size: 26px;
+        }
+        p {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+  .secondColumn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    @include sm {
+      position: absolute;
+      top: 50%;
+      background-color: transparent;
+      width: 100%;
+    }
+  }
+
+  .FormContainer {
+    width: 500px;
+    @include sm {
+      width: 90vw;
+      margin: auto;
+    }
+
+    div.signin-form {
+      margin-top: 35px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 350px;
+      height: auto;
+
+      @include sm {
+        width: 100%;
+      }
+      form {
+        width: 100%;
+
+        div {
+          span {
+            color: red;
+            font-size: 12px;
+            height: 12px;
+            margin-left: 10px;
+
+            @include sm {
+              font-size: 10px;
+            }
+          }
+        }
+
+        //Loader
+        .loader {
+          width: 36px;
+          height: 36px;
+          border: 3px dotted #fff;
+          border-style: solid solid dotted dotted;
+          border-radius: 50%;
+          display: inline-block;
+          position: relative;
+          box-sizing: border-box;
+          animation: rotation 2s linear infinite;
+        }
+        .loader::after {
+          content: "";
+          box-sizing: border-box;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          border: 3px dotted #fff;
+          border-style: solid solid dotted;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          animation: rotationBack 1s linear infinite;
+          transform-origin: center center;
+        }
+
+        @keyframes rotation {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes rotationBack {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(-360deg);
+          }
+        }
+      }
+
+      span.login-error {
+        color: red;
+        height: 12px;
+        max-width: 350px;
+        font-size: 12px;
+
+        @include sm {
+          font-size: 10px;
+        }
+      }
+      span.login-success {
+        color: green;
+        height: 12px;
+        max-width: 350px;
+        font-size: 12px;
+        @include sm {
+          font-size: 10px;
+        }
+      }
+    }
+
+    @include sm {
+      border-radius: 10px;
+      margin: -50px 15px 0 15px;
+      background: white;
+      padding: 20px;
+    }
+  }
+}

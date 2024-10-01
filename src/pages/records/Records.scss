@@ -1,0 +1,129 @@
+@import "../../styles/responsive.scss";
+
+.admin-records {
+  width: 100%;
+  div.records-header {
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    div.svgs-container {
+      display: flex;
+      gap: 15px;
+      @include sm {
+        display: none;  
+      }
+      span {
+        display: flex;
+        gap: 5px;
+        font-family: Inter;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: left;
+        align-items: center;
+        cursor: pointer;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+    div.search-button {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      gap: 10px;
+      border-radius: 8px;
+      background-color: #f6f4f7;
+
+      @include sm {
+        width: 100%;
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      input {
+        width: 250px;
+        background: transparent;
+        height: 100%;
+        outline: none;
+        font-family: Inter, Poppins, sans-serif;
+        font-size: 14px;
+        &::placeholder {
+          font-style: italic;
+          font-weight: 300;
+          font-family: Inter, Poppins;
+        }
+
+        @include sm {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  div.records-info {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #f8f9fc;
+    padding: 20px;
+    gap: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    p {
+      width: 100%;
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17.91px;
+      text-align: left;
+    }
+    button {
+      color: #50496a;
+      border-radius: 8px;
+      border: 1px solid #e5e0da;
+      width: 100px;
+      padding: 8px;
+      font-family: Inter;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16.7px;
+      background-color: #fefefd;
+    }
+  }
+
+  .recordsTable {
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+    min-height: 200px;
+    height: 620px;
+    margin-top: 30px;
+    box-shadow: 2px 6px 40px 0px #83838340;
+  }
+
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    span {
+      font-family: Inter;
+      font-size: 14.8px;
+      font-weight: 600;
+      line-height: 17.91px;
+      text-align: left;
+      color: #b5b7be;
+    }
+  }
+}

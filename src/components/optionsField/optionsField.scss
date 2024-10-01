@@ -1,0 +1,21 @@
+.optionsContainer {
+display: flex;
+flex-direction: column;
+width: 100%;
+}
+.dropDownContainer {
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    background-color: rgb(216, 216, 216);
+    width: 215px;
+    outline: none;
+    border: 1px solid snow;
+    font-size: 14px;
+
+    option {
+        background-color: #fff;
+        border: none;
+    }
+    
+}
