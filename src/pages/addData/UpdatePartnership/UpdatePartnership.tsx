@@ -275,8 +275,17 @@ const UpdatePartnership = () => {
           title: memberData.title || "",
         }));
       })
-      .catch((error) => {
+      .catch((error) => { 
         console.log(error);
+        // reset all updated values if there is any shiiiii
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          birthDate: "",
+          title: "",
+        }));
 
         // Handle different types of errors
         if (error.response) {
@@ -341,7 +350,6 @@ const UpdatePartnership = () => {
     timeoutId.current = setTimeout(() => {
       handleFormFiller(searchMail);
     }, 1000); // Delay of 1 second
-
   };
 
   // Loading logic
@@ -359,9 +367,7 @@ const UpdatePartnership = () => {
       <header>Update Partnership Data</header>
       {isInfoBoxOpen && (
         <div className="records-info">
-          <p>
-            Auto Form Fill, just type in the email and the form auto fills.
-          </p>
+          <p>Auto Form Fill, just type in the email and the form auto fills.</p>
           <button onClick={() => setIsInfoBoxOpen(false)}>Okay, got it!</button>
         </div>
       )}
